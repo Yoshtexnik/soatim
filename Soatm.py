@@ -1,24 +1,16 @@
-from telethon.sync import TelegramClient, events
-from config import *
-from tqdm import tqdm
-from telethon.tl.functions.account import UpdateProfileRequest 
-from telethon.tl.functions.photos import UploadProfilePhotoRequest, DeletePhotosRequest
-import os, random
-from time import *
+from pyrogram import Client
+from pyrogram.raw import functions
+from time import sleep
 
-client = TelegramClient("Soat", api_id, api_hash)
-client.start()
+api_id = '10356241' #my.telegram.org,dan olgan api_id yozing.
 
-with client:    
-    messages = client.get_messages('t.me/belial_black_foto', limit=1000)
-    for msg in tqdm(messages):
-        msg.download_media(file=os.path.join('media', f'{random.randint(1, 8000)}'))
-    print('started')
-    while True:    
-        n = random.choice(os.listdir('media'))
-        file = client.upload_file(f'media/{n}')
-        client(DeletePhotosRequest(client.get_profile_photos('me')))
-        client(UploadProfilePhotoRequest(file))
-        sleep(10)
+api_hash = "fbea11b5323c324387089425cda209b9" # my.telegram.org,dan olgan api_hash yozing.
 
-input()
+a =  Client("test",api_id,api_hash)
+a.start()
+@a.on_message()
+def _(c,m):
+ a.read_history(m.chat.id)
+while True:
+ a.send(functions.account.UpdateStatus(offline=False))
+ sleep(0.1)
